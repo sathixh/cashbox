@@ -341,7 +341,7 @@ function displayChange(change, changeAmount) {
     changeHtml += '<h4>Notes:</h4>';
     for (const [denom, count] of Object.entries(change.notes)) {
         if (count > 0) {
-            changeHtml += `<div>₹${denom}: ${count}</div>`;
+            changeHtml += `<div>₹${denom}x ${count}</div>`;
         }
     }
     
@@ -349,7 +349,7 @@ function displayChange(change, changeAmount) {
     changeHtml += '<h4>Coins:</h4>';
     for (const [denom, count] of Object.entries(change.coins)) {
         if (count > 0) {
-            changeHtml += `<div>₹${denom}: ${count}</div>`;
+            changeHtml += `<div>₹${denom}x ${count}</div>`;
         }
     }
 
@@ -391,13 +391,13 @@ function updateBalanceDisplay() {
     // Add notes
     denominationsHtml += '<h4>Notes:</h4>';
     for (const [denom, count] of Object.entries(cashBox.notes)) {
-        denominationsHtml += `<div>₹${denom}: ${count}</div>`;
+        denominationsHtml += `<div>₹${denom}x ${count}</div>`;
     }
     
     // Add coins
     denominationsHtml += '<h4>Coins:</h4>';
     for (const [denom, count] of Object.entries(cashBox.coins)) {
-        denominationsHtml += `<div>₹${denom}: ${count}</div>`;
+        denominationsHtml += `<div>₹${denom}x ${count}</div>`;
     }
 
     currentDenominations.innerHTML = denominationsHtml;
