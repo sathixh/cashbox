@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Box Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+        <h1>Cash Box Application</h1>
+        
+        <!-- Initial Cash Box Setup -->
+        <div class="section" id="initialSetup">
+            <h2>Enter Initial Cash Box Amount</h2>
+            <div class="denominations">
+                <h3>Notes:</h3>
+                <div class="input-group">
+                    <label><span class="currency-icon">₹</span>500: <input type="number" id="note500" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>200: <input type="number" id="note200" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>100: <input type="number" id="note100" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>50: <input type="number" id="note50" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>20: <input type="number" id="note20" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>10: <input type="number" id="note10" min="0" value=""></label>
+                </div>
+                <h3>Coins:</h3>
+                <div class="input-group">
+                    <label><span class="currency-icon coin">₹</span>10: <input type="number" id="coin10" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>5: <input type="number" id="coin5" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>2: <input type="number" id="coin2" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>1: <input type="number" id="coin1" min="0" value=""></label>
+                </div>
+            </div>
+            <button class="setInitialAmount" id="setInitialAmount">Set Initial Amount</button>
+        </div>
+
+        <!-- Balance Section -->
+        <div class="section" id="balanceSection" style="display: none;">
+            <h2>Current Balance</h2>
+            <div id="totalBalance">Total Balance: ₹0</div>
+            <div class="denominations">
+                <h3>Current Denominations:</h3>
+                <div id="currentDenominations"></div>
+            </div>
+            <button id="showAddAmountBtn" class="action-btn">Add Cash</button>
+        </div>
+
+        <!-- Add Amount Section -->
+        <div class="section" id="addAmount" style="display: none;">
+            <h2>Add Amount to Cash Box</h2>
+            <div class="denominations">
+                <h3>Notes:</h3>
+                <div class="input-group">
+                    <label><span class="currency-icon">₹</span>500: <input type="number" id="addNote500" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>200: <input type="number" id="addNote200" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>100: <input type="number" id="addNote100" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>50: <input type="number" id="addNote50" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>20: <input type="number" id="addNote20" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>10: <input type="number" id="addNote10" min="0" value=""></label>
+                </div>
+                <h3>Coins:</h3>
+                <div class="input-group">
+                    <label><span class="currency-icon coin">₹</span>10: <input type="number" id="addCoin10" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>5: <input type="number" id="addCoin5" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>2: <input type="number" id="addCoin2" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>1: <input type="number" id="addCoin1" min="0" value=""></label>
+                </div>
+            </div>
+            <div class="total-amount">
+                <h3>Total Amount to Add: <span id="totalAddAmount">₹0</span></h3>
+            </div>
+            <div class="button-group">
+                <button id="addToCashBox">Add Amount</button>
+                <button id="closeAddAmount" class="secondary-btn">Close</button>
+            </div>
+        </div>
+
+        <!-- Give Change Section -->
+        <div class="section" id="giveChange" style="display: none;">
+            <h2>Give Change</h2>
+            <div class="input-group">
+                <label>Product Amount: ₹<input type="number" id="productAmount" placeholder="Enter product amount" min="0"></label>
+            </div>
+            <div class="denominations">
+                <h3>Amount Received:</h3>
+                <div class="input-group">
+                    <h4>Notes:</h4>
+                    <label><span class="currency-icon">₹</span>500: <input type="number" id="receivedNote500" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>200: <input type="number" id="receivedNote200" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>100: <input type="number" id="receivedNote100" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>50: <input type="number" id="receivedNote50" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>20: <input type="number" id="receivedNote20" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>10: <input type="number" id="receivedNote10" min="0" value=""></label>
+                </div>
+                <div class="input-group">
+                    <h4>Coins:</h4>
+                    <label><span class="currency-icon coin">₹</span>10: <input type="number" id="receivedCoin10" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>5: <input type="number" id="receivedCoin5" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>2: <input type="number" id="receivedCoin2" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>1: <input type="number" id="receivedCoin1" min="0" value=""></label>
+                </div>
+                <div class="total-amount">
+                    <h3>Total Amount Received: <span id="totalAmountReceived">₹0</span></h3>
+                </div>
+            </div>
+            <button id="calculateChange">Calculate Change</button>
+            <div id="changeResult" class="denominations" style="display: none;">
+                <h3>Change to Give:</h3>
+                <div id="changeDenominations"></div>
+                <div id="balanceAfterChange" class="total-amount"></div>
+            </div>
+        </div>
+
+        <!-- Restart Button -->
+        <button id="restartBtn" style="display: none;">Restart Cash Box</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
