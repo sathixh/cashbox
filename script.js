@@ -16,6 +16,26 @@ let cashBox = {
     }
 };
 
+// Load data from localStorage on page load
+function loadFromLocalStorage() {
+    const savedData = localStorage.getItem('cashBoxData');
+    if (savedData) {
+        cashBox = JSON.parse(savedData);
+        // Show appropriate sections based on saved data
+        initialSetup.style.display = 'none';
+        balanceSection.style.display = 'block';
+        giveChange.style.display = 'block';
+        restartBtn.style.display = 'block';
+        // Update display with saved data
+        updateBalanceDisplay();
+    }
+}
+
+// Save data to localStorage
+function saveToLocalStorage() {
+    localStorage.setItem('cashBoxData', JSON.stringify(cashBox));
+}
+
 // DOM Elements
 const initialSetup = document.getElementById('initialSetup');
 const addAmount = document.getElementById('addAmount');
@@ -32,6 +52,16 @@ const totalBalance = document.getElementById('totalBalance');
 const currentDenominations = document.getElementById('currentDenominations');
 const changeResult = document.getElementById('changeResult');
 const changeDenominations = document.getElementById('changeDenominations');
+
+// Calculator functionality
+const calcDisplay = document.getElementById('calcDisplay');
+const calcButtons = document.querySelectorAll('.calc-btn');
+const calcEquals = document.getElementById('calcEquals');
+const calcClear = document.getElementById('calcClear');
+const calcBackspace = document.getElementById('calcBackspace');
+const calcApply = document.getElementById('calcApply');
+
+let calcExpression = '';
 
 // Add event listeners for denomination inputs
 const addDenominationInputs = [
@@ -117,6 +147,8 @@ setInitialAmountBtn.addEventListener('click', () => {
 
     // Update display
     updateBalanceDisplay();
+    // Save to localStorage
+    saveToLocalStorage();
 });
 
 // Show Add Amount section
@@ -174,6 +206,8 @@ addToCashBoxBtn.addEventListener('click', () => {
     // Update displays
     updateTotalAddAmount();
     updateBalanceDisplay();
+    // Save to localStorage
+    saveToLocalStorage();
 });
 
 // Calculate and give change
@@ -251,16 +285,19 @@ calculateChangeBtn.addEventListener('click', () => {
         cashBox.coins[denom] -= count;
     }
 
-    // Display change
+    // Display the change result
     displayChange(change, changeAmount);
-    
-    // Reset input fields
-    document.getElementById('productAmount').value = '';
+
+    // Update the balance display
+    updateBalanceDisplay();
+    // Save to localStorage
+    saveToLocalStorage();
+
+    // Reset received denomination inputs
     receivedDenominationInputs.forEach(id => {
         document.getElementById(id).value = '';
     });
-    
-    updateBalanceDisplay();
+    document.getElementById('productAmount').value = '';
     updateTotalAmountReceived();
 });
 
@@ -303,57 +340,85 @@ restartBtn.addEventListener('click', () => {
     balanceSection.style.display = 'none';
     restartBtn.style.display = 'none';
     changeResult.style.display = 'none';
+
+    // Clear localStorage only on restart
+    localStorage.removeItem('cashBoxData');
 });
 
-// Calculate change in denominations
+// Calculate change denominations
 function calculateChange(amount) {
-    const denominations = [500, 200, 100, 50, 20, 10, 5, 2, 1];
-    let remaining = amount;
     const change = {
-        notes: { 500: 0, 200: 0, 100: 0, 50: 0, 20: 0, 10: 0 },
-        coins: { 10: 0, 5: 0, 2: 0, 1: 0 }
+        notes: {},
+        coins: {}
     };
+    
+    // Available denominations in descending order
+    const denominations = [
+        { type: 'notes', value: 500 },
+        { type: 'notes', value: 200 },
+        { type: 'notes', value: 100 },
+        { type: 'notes', value: 50 },
+        { type: 'notes', value: 20 },
+        { type: 'notes', value: 10 },
+        { type: 'coins', value: 10 },
+        { type: 'coins', value: 5 },
+        { type: 'coins', value: 2 },
+        { type: 'coins', value: 1 }
+    ];
+
+    let remainingAmount = amount;
 
     for (const denom of denominations) {
-        if (remaining >= denom) {
-            const available = denom >= 10 ? cashBox.notes[denom] : cashBox.coins[denom];
-            const needed = Math.floor(remaining / denom);
-            const count = Math.min(available, needed);
-            
-            if (denom >= 10) {
-                change.notes[denom] = count;
-            } else {
-                change.coins[denom] = count;
-            }
-            
-            remaining -= count * denom;
+        const { type, value } = denom;
+        const available = cashBox[type][value];
+        const count = Math.min(Math.floor(remainingAmount / value), available);
+        
+        if (count > 0) {
+            change[type][value] = count;
+            remainingAmount -= count * value;
         }
     }
 
-    return remaining === 0 ? change : null;
+    if (remainingAmount > 0) {
+        return null; // Cannot give exact change
+    }
+
+    return change;
 }
 
-// Display change denominations
+// Display change result
 function displayChange(change, changeAmount) {
-    let changeHtml = '';
+    const changeNotes = document.getElementById('changeNotes');
+    const changeCoins = document.getElementById('changeCoins');
+    const totalChangeAmount = document.getElementById('totalChangeAmount');
+    const balanceAfterChange = document.getElementById('balanceAfterChange');
+    const productAmountDisplay = document.getElementById('productAmountDisplay');
     
-    // Add notes
-    changeHtml += '<h4>Notes:</h4>';
+    // Display product amount
+    productAmountDisplay.textContent = document.getElementById('productAmount').value;
+
+    // Display notes
+    let notesHtml = '';
     for (const [denom, count] of Object.entries(change.notes)) {
         if (count > 0) {
-            changeHtml += `<div>₹${denom}x ${count}</div>`;
+            notesHtml += `<div>₹${denom}x ${count}</div>`;
         }
     }
-    
-    // Add coins
-    changeHtml += '<h4>Coins:</h4>';
+    changeNotes.innerHTML = notesHtml || '<div>No notes</div>';
+
+    // Display coins
+    let coinsHtml = '';
     for (const [denom, count] of Object.entries(change.coins)) {
         if (count > 0) {
-            changeHtml += `<div>₹${denom}x ${count}</div>`;
+            coinsHtml += `<div>₹${denom}x ${count}</div>`;
         }
     }
+    changeCoins.innerHTML = coinsHtml || '<div>No coins</div>';
 
-    // Add change amount and balance after change
+    // Display total change amount
+    totalChangeAmount.textContent = changeAmount;
+
+    // Calculate and display balance after change
     let totalBalance = 0;
     for (const [denom, count] of Object.entries(cashBox.notes)) {
         totalBalance += parseInt(denom) * count;
@@ -361,13 +426,9 @@ function displayChange(change, changeAmount) {
     for (const [denom, count] of Object.entries(cashBox.coins)) {
         totalBalance += parseInt(denom) * count;
     }
+    balanceAfterChange.textContent = totalBalance;
 
-    changeHtml += `<div class="total-amount">
-        <h4>Change Amount: ₹${changeAmount}</h4>
-        <h4>Balance After Change: ₹${totalBalance}</h4>
-    </div>`;
-
-    changeDenominations.innerHTML = changeHtml;
+    // Show the change result section
     changeResult.style.display = 'block';
 }
 
@@ -413,6 +474,7 @@ function checkLogin() {
 
 // Logout function
 function logout() {
+    // Only clear session storage, keep localStorage data
     sessionStorage.removeItem('isLoggedIn');
     window.location.href = 'login.html';
 }
@@ -420,5 +482,76 @@ function logout() {
 // Add logout button event listener
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
-// Check login status when page loads
-checkLogin(); 
+// Check login status and load data when page loads
+window.addEventListener('load', () => {
+    checkLogin();
+    loadFromLocalStorage();
+});
+
+// Clear transaction for next transaction
+document.getElementById('clearTransaction').addEventListener('click', () => {
+    // Reset product amount
+    document.getElementById('productAmount').value = '';
+    
+    // Reset received denomination inputs
+    receivedDenominationInputs.forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    
+    // Reset total amount received display
+    document.getElementById('totalAmountReceived').textContent = '₹0';
+    
+    // Hide the change result section
+    changeResult.style.display = 'none';
+    
+    // Update total amount received
+    updateTotalAmountReceived();
+});
+
+// Add click event listeners to calculator buttons
+calcButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const value = button.dataset.value;
+        if (value) {
+            calcExpression += value;
+            calcDisplay.value = calcExpression;
+        }
+    });
+});
+
+// Calculate result
+calcEquals.addEventListener('click', () => {
+    try {
+        const result = eval(calcExpression);
+        calcExpression = result.toString();
+        calcDisplay.value = calcExpression;
+    } catch (error) {
+        calcDisplay.value = 'Error';
+        calcExpression = '';
+    }
+});
+
+// Clear calculator
+calcClear.addEventListener('click', () => {
+    calcExpression = '';
+    calcDisplay.value = '';
+});
+
+// Backspace
+calcBackspace.addEventListener('click', () => {
+    calcExpression = calcExpression.slice(0, -1);
+    calcDisplay.value = calcExpression;
+});
+
+// Apply result to product amount
+calcApply.addEventListener('click', () => {
+    try {
+        const result = eval(calcExpression);
+        document.getElementById('productAmount').value = result;
+        calcExpression = '';
+        calcDisplay.value = '';
+    } catch (error) {
+        calcDisplay.value = 'Error';
+        calcExpression = '';
+    }
+}); 
