@@ -5,6 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cash Box Application</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #changeResult {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid #4caf50;
+        }
+        #changeResult h3 {
+            color: #2e7d32;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+        .change-details {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .change-amount {
+            font-size: 1.5em;
+            color: #2e7d32;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .balance-after {
+            font-size: 1.3em;
+            color: #1b5e20;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #4caf50;
+        }
+        .product-amount {
+            font-size: 1.3em;
+            color: #1b5e20;
+            margin-bottom: 15px;
+        }
+        .clear-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .clear-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Calculator Styles */
+        .calculator-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .calculator {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        #calcDisplay {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            font-size: 1.2em;
+            text-align: right;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        .calc-btn {
+            padding: 10px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 4px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .calc-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .calc-btn.operator {
+            background-color: #f0f0f0;
+            color: #2196F3;
+        }
+
+        .calc-btn.operator:hover {
+            background-color: #e3f2fd;
+        }
+
+        #calcEquals {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        #calcEquals:hover {
+            background-color: #1976D2;
+        }
+
+        #calcClear, #calcBackspace {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        #calcClear:hover, #calcBackspace:hover {
+            background-color: #ffcdd2;
+        }
+
+        #calcApply {
+            grid-column: span 4;
+            background-color: #4caf50;
+            color: white;
+            margin-top: 5px;
+        }
+
+        #calcApply:hover {
+            background-color: #388e3c;
+        }
+
+        /* Enhanced Change Denominations Styles */
+        .notes-section, .coins-section {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .notes-section h5, .coins-section h5 {
+            color: #1976D2;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2196F3;
+        }
+
+        .notes-section div, .coins-section div {
+            font-size: 1.2em;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            background-color: #E3F2FD;
+            color: #1565C0;
+            font-weight: 500;
+        }
+
+        .coins-section div {
+            background-color: #FCE4EC;
+            color: #C2185B;
+        }
+
+        .notes-section div:empty::before, .coins-section div:empty::before {
+            content: "No denominations";
+            color: #757575;
+            font-style: italic;
+        }
+
+        #changeNotes, #changeCoins {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #changeNotes div, #changeCoins div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            transition: transform 0.2s;
+        }
+
+        #changeNotes div:hover, #changeCoins div:hover {
+            transform: translateX(5px);
+        }
+
+        .change-amount {
+            font-size: 1.8em;
+            color: #2e7d32;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #E8F5E9;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .balance-after {
+            font-size: 1.5em;
+            color: #1b5e20;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #F1F8E9;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -17,22 +233,103 @@
             <div class="denominations">
                 <h3>Notes:</h3>
                 <div class="input-group">
-                    <label><span class="currency-icon">₹</span>500x <input type="number" id="note500" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>200x <input type="number" id="note200" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>100x <input type="number" id="note100" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>50x <input type="number" id="note50" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>20x <input type="number" id="note20" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>10x <input type="number" id="note10" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>500x <input type="number" id="note500" min="0" value="4"></label>
+                    <label><span class="currency-icon">₹</span>200x <input type="number" id="note200" min="0" value="4"></label>
+                    <label><span class="currency-icon">₹</span>100x <input type="number" id="note100" min="0" value="4"></label>
+                    <label><span class="currency-icon">₹</span>50x <input type="number" id="note50" min="0" value="4"></label>
+                    <label><span class="currency-icon">₹</span>20x <input type="number" id="note20" min="0" value="4"></label>
+                    <label><span class="currency-icon">₹</span>10x <input type="number" id="note10" min="0" value="4"></label>
                 </div>
                 <h3>Coins:</h3>
                 <div class="input-group">
-                    <label><span class="currency-icon coin">₹</span>10x <input type="number" id="coin10" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>5x <input type="number" id="coin5" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>2x <input type="number" id="coin2" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>1x <input type="number" id="coin1" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>10x <input type="number" id="coin10" min="0" value="4"></label>
+                    <label><span class="currency-icon coin">₹</span>5x <input type="number" id="coin5" min="0" value="4"></label>
+                    <label><span class="currency-icon coin">₹</span>2x <input type="number" id="coin2" min="0" value="4"></label>
+                    <label><span class="currency-icon coin">₹</span>1x <input type="number" id="coin1" min="0" value="4"></label>
                 </div>
             </div>
             <button class="setInitialAmount" id="setInitialAmount">Set Initial Amount</button>
+        </div>
+
+        
+
+        <!-- Give Change Section -->
+        <div class="section" id="giveChange" style="display: none;">
+            <h2>Give Change</h2>
+            <div class="input-group">
+                <label>Product Amount: ₹<input type="number" id="productAmount" placeholder="Enter product amount" min="0"></label>
+            </div>
+            
+            <!-- Calculator Section -->
+            <div class="calculator-section">
+                <h3>Calculator</h3>
+                <div class="calculator">
+                    <input type="text" id="calcDisplay" readonly>
+                    <div class="calc-buttons">
+                        <button class="calc-btn" data-value="7">7</button>
+                        <button class="calc-btn" data-value="8">8</button>
+                        <button class="calc-btn" data-value="9">9</button>
+                        <button class="calc-btn operator" data-value="/">÷</button>
+                        <button class="calc-btn" data-value="4">4</button>
+                        <button class="calc-btn" data-value="5">5</button>
+                        <button class="calc-btn" data-value="6">6</button>
+                        <button class="calc-btn operator" data-value="*">×</button>
+                        <button class="calc-btn" data-value="1">1</button>
+                        <button class="calc-btn" data-value="2">2</button>
+                        <button class="calc-btn" data-value="3">3</button>
+                        <button class="calc-btn operator" data-value="-">-</button>
+                        <button class="calc-btn" data-value="0">0</button>
+                        <button class="calc-btn" data-value=".">.</button>
+                        <button class="calc-btn" id="calcEquals">=</button>
+                        <button class="calc-btn operator" data-value="+">+</button>
+                        <button class="calc-btn" id="calcClear">C</button>
+                        <button class="calc-btn" id="calcBackspace">⌫</button>
+                        <button class="calc-btn" id="calcApply">Apply to Amount</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="denominations">
+                <h3>Amount Received:</h3>
+                <div class="input-group">
+                    <h4>Notes:</h4>
+                    <label><span class="currency-icon">₹</span>500x <input type="number" id="receivedNote500" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>200x <input type="number" id="receivedNote200" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>100x <input type="number" id="receivedNote100" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>50x <input type="number" id="receivedNote50" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>20x <input type="number" id="receivedNote20" min="0" value=""></label>
+                    <label><span class="currency-icon">₹</span>10x <input type="number" id="receivedNote10" min="0" value=""></label>
+                </div>
+                <div class="input-group">
+                    <h4>Coins:</h4>
+                    <label><span class="currency-icon coin">₹</span>10x <input type="number" id="receivedCoin10" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>5x <input type="number" id="receivedCoin5" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>2x <input type="number" id="receivedCoin2" min="0" value=""></label>
+                    <label><span class="currency-icon coin">₹</span>1x <input type="number" id="receivedCoin1" min="0" value=""></label>
+                </div>
+                <div class="total-amount">
+                    <h3>Total Amount Received: <span id="totalAmountReceived">₹0</span></h3>
+                </div>
+            </div>
+            <button id="calculateChange">Calculate Change</button>
+            <div id="changeResult" class="denominations" style="display: none;">
+                <h3>Transaction Summary</h3>
+                <div class="product-amount">Product Amount: ₹<span id="productAmountDisplay">0</span></div>
+                <div class="change-details">
+                    <h4>Change to Give:</h4>
+                    <div class="notes-section">
+                        <h5>Notes:</h5>
+                        <div id="changeNotes"></div>
+                    </div>
+                    <div class="coins-section">
+                        <h5>Coins:</h5>
+                        <div id="changeCoins"></div>
+                    </div>
+                    <div class="change-amount">Change Amount: ₹<span id="totalChangeAmount">0</span></div>
+                </div>
+                <div class="balance-after">Balance After Change: ₹<span id="balanceAfterChange">0</span></div>
+                <button id="clearTransaction" class="clear-btn">Clear for Next Transaction</button>
+            </div>
         </div>
 
         <!-- Balance Section -->
@@ -73,42 +370,6 @@
             <div class="button-group">
                 <button id="addToCashBox">Add Amount</button>
                 <button id="closeAddAmount" class="secondary-btn">Close</button>
-            </div>
-        </div>
-
-        <!-- Give Change Section -->
-        <div class="section" id="giveChange" style="display: none;">
-            <h2>Give Change</h2>
-            <div class="input-group">
-                <label>Product Amount: ₹<input type="number" id="productAmount" placeholder="Enter product amount" min="0"></label>
-            </div>
-            <div class="denominations">
-                <h3>Amount Received:</h3>
-                <div class="input-group">
-                    <h4>Notes:</h4>
-                    <label><span class="currency-icon">₹</span>500x <input type="number" id="receivedNote500" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>200x <input type="number" id="receivedNote200" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>100x <input type="number" id="receivedNote100" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>50x <input type="number" id="receivedNote50" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>20x <input type="number" id="receivedNote20" min="0" value=""></label>
-                    <label><span class="currency-icon">₹</span>10x <input type="number" id="receivedNote10" min="0" value=""></label>
-                </div>
-                <div class="input-group">
-                    <h4>Coins:</h4>
-                    <label><span class="currency-icon coin">₹</span>10x <input type="number" id="receivedCoin10" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>5x <input type="number" id="receivedCoin5" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>2x <input type="number" id="receivedCoin2" min="0" value=""></label>
-                    <label><span class="currency-icon coin">₹</span>1x <input type="number" id="receivedCoin1" min="0" value=""></label>
-                </div>
-                <div class="total-amount">
-                    <h3>Total Amount Received: <span id="totalAmountReceived">₹0</span></h3>
-                </div>
-            </div>
-            <button id="calculateChange">Calculate Change</button>
-            <div id="changeResult" class="denominations" style="display: none;">
-                <h3>Change to Give:</h3>
-                <div id="changeDenominations"></div>
-                <div id="balanceAfterChange" class="total-amount"></div>
             </div>
         </div>
 
