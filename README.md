@@ -2,6 +2,11 @@
 
 A modern web-based cash box management system for handling cash transactions, calculating change, and maintaining cash balance.
 
+## Developer Information
+- **Developer**: SK IT Solutions
+- **Year**: 2025
+- **Version**: 1.0.0
+
 ## Features
 
 ### 1. Cash Box Management
@@ -124,7 +129,7 @@ For issues or questions:
 3. Contact support team
 
 ## License
-[Your License Information]
+© 2025 SK IT Solutions. All rights reserved.
 
 ## Version
 1.0.0
